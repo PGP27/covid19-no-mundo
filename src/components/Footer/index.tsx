@@ -2,7 +2,7 @@ import { FaLinkedin, FaGithub } from 'react-icons/fa';
 
 const Footer = () => {
   return (
-    <footer className="flex flex-col items-center justify-center p-2 text-center bg-gray-100 md:flex-row">
+    <footer className="absolute bottom-0 w-full flex flex-col items-center justify-center p-2 text-center bg-gray-100 md:flex-row">
       <p>Website created by Pedro Gonçalves Pereira. All Rights Reserved</p>
       <div className="flex flex-row items-center justify-center">
         <a href="https://www.linkedin.com/in/pedrogon%C3%A7alvespereira/" target="_blank">

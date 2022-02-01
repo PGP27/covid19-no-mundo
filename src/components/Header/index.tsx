@@ -9,7 +9,7 @@ const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <header className="flex flex-row items-center justify-center md:items-start font-default mt-2">
+    <header className="flex flex-row items-center justify-center md:items-start font-default pt-2">
       <Link to="/" className="hidden mt-1 ml-4 md:block">
         <div className="flex flex-row items-center justify-center group">
           <MdOutlineCoronavirus fontSize={24} className="group-hover:text-gray-600"/>
