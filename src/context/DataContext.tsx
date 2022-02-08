@@ -3,8 +3,8 @@ import { createContext, ReactNode, useContext, useEffect, useState } from 'react
 interface DataContextProps {
   loading: boolean,
   globalData: GlobalDataProps,
-  continentsData: ContinentsDataProps,
-  countriesData: CountriesDataProps,
+  continentsData: ContinentsDataProps[],
+  countriesData: CountriesDataProps[],
 };
 
 interface GlobalDataProps {
@@ -68,8 +68,8 @@ const DataContext = createContext({} as DataContextProps);
 const DataProvider = ({ children }: DataProviderProps) => {
   const [loading, setLoading] = useState(false);
   const [globalData, setGlobalData] = useState<GlobalDataProps>({} as GlobalDataProps);
-  const [continentsData, setContinentsData] = useState<ContinentsDataProps>({} as ContinentsDataProps);
-  const [countriesData, setCountriesData] = useState<CountriesDataProps>({} as CountriesDataProps);
+  const [continentsData, setContinentsData] = useState<Array<ContinentsDataProps>>([] as ContinentsDataProps[]);
+  const [countriesData, setCountriesData] = useState<Array<CountriesDataProps>>([] as CountriesDataProps[]);
 
   useEffect(() => {
     const getDatas = async () => {

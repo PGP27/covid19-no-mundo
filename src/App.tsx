@@ -5,7 +5,7 @@ import Home from './pages/Home';
 import { DataProvider } from './context/DataContext';
 
 const App = () => (
-  <DataProvider>  
+  <DataProvider>
     <Header />
     <Routes>
       <Route path="/" element={<Home />} />
