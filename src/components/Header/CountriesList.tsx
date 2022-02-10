@@ -9,7 +9,7 @@ const CountriesList = ({ countries, searchText, onClick }: any) => {
       return (
         <div
           style={ { width: `${searchBarDivElement.offsetWidth}px`, border: '1px solid gray' } }
-          className="countries-list absolute mt-2 max-h-60 overflow-auto bg-white z-10"
+          className="countries-list absolute mt-2 max-h-60 overflow-auto bg-white z-10 rounded-sm shadow-[0px_0px_3px_0px_rgba(0,0,0,0.5)]"
         >
           <ul className="">
             { filteredCountries.map(( { country, countryInfo: { flag } }: any) => {
@@ -33,7 +33,7 @@ const CountriesList = ({ countries, searchText, onClick }: any) => {
     return (
       <div
         style={ { width: `${searchBarDivElement.offsetWidth}px`, border: '1px solid gray' } }
-        className="absolute mt-2 max-h-60 overflow-auto bg-white z-10"
+        className="absolute mt-2 max-h-60 overflow-auto bg-white z-10 rounded-sm shadow-[0px_0px_3px_0px_rgba(0,0,0,0.5)]"
       >
         <ul>
           <li className="flex items-center p-2">
