@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useData } from '../context/DataContext';
+import { HiOutlineChevronLeft, HiOutlineChevronRight } from 'react-icons/hi';
 import WorldMap from 'react-svg-worldmap';
 import Loading from '../components/Loading';
 
@@ -66,6 +67,34 @@ const Home = () => {
     const name = countriesData.find((c) => c.countryInfo.iso2 === e.countryCode)?.country;
     navigate(`/${name}`);
   };
+  
+  const prevLocation = () => {
+    const currentLocationObj = continentsData.find((c) => c.continent === selectedLocation);
+    if (currentLocationObj) {
+      const index = continentsData.indexOf(currentLocationObj);
+      if (index === 0) {
+        setSelectedLocation('World');
+      } else {
+        setSelectedLocation(continentsData[index - 1].continent);
+      }
+    } else {
+      setSelectedLocation(continentsData[continentsData.length - 1].continent);
+    }
+  };
+
+  const nextLocation = () => {
+    const currentLocationObj = continentsData.find((c) => c.continent === selectedLocation);
+    if (currentLocationObj) {
+      const index = continentsData.indexOf(currentLocationObj);
+      if (index === continentsData.length - 1) {
+        setSelectedLocation('World');
+      } else {
+        setSelectedLocation(continentsData[index + 1].continent);
+      }
+    } else {
+      setSelectedLocation(continentsData[0].continent);
+    }
+  };
 
   useEffect(() => {
     buildWorldMap();
@@ -77,19 +106,39 @@ const Home = () => {
   }
 
   return (
-    <div>
-      <div></div>
-      <div>
+    <div className="flex flex-col items-center">
+      <div className="flex">
+        <button type="button" onClick={prevLocation}>
+          <HiOutlineChevronLeft fontSize={24} />
+        </button>
+        <p>{selectedLocation}</p>
+        <button type="button" onClick={nextLocation}>
+          <HiOutlineChevronRight fontSize={24} />
+        </button>
+      </div>
+      <div className="flex items-center justify-center">
         <div>
           <WorldMap
-            color="green"
-            size="responsive"
+            color="#AAAA00"
+            size="xl"
             data={worldMapData}
             valueSuffix="Contaminados"
             onClickFunction={onClickCountry}
+            backgroundColor="#DDEEFF"
+            tooltipBgColor="white"
+            tooltipTextColor="black"
           />
         </div>
-        <div></div>
+        <div>
+          <p>{selectedLocationData.cases} casos confirmados</p>
+          <div>
+            <p>recuperados: {selectedLocationData.recovered}</p>
+            <p>infectados: {selectedLocationData.active}</p>
+            <p>mortos: {selectedLocationData.deaths}</p>
+          </div>
+          <p>{selectedLocationData.tests} teste aplicados</p>
+          <p>{selectedLocationData.vaccineCoverage} doses de vacinas aplicadas</p>
+        </div>
       </div>
     </div>
   );
