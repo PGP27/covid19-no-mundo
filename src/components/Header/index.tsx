@@ -67,10 +67,25 @@ const Header = () => {
       <button
         type="button"
         className="flex flex-row items-center justify-center mr-2 p-2 rounded-full hover:bg-gray-200 md:hidden"
-        onClick={() => setMenuOpen(!menuOpen)}
+        onClick={() => {
+          const menu = document.querySelector('.mobile-menu');
+          menu?.classList.toggle('-translate-x-full');
+        }}
       >
         <FiMenu fontSize={24} className="group-hover:text-gray-600"/>
       </button>
+      <div className="mobile-menu absolute w-full flex flex-col bg-gray-700 text-white z-10 top-[48px] left-0 transform -translate-x-full transition duration-300 ease-in-out md:hidden">
+        <div>
+          <p>Home</p>
+        </div>
+        <div>
+          <p>Sobre</p>
+          <AiOutlineInfoCircle fontSize={20} />
+        </div>
+        <div>
+          <p>Busca avançada</p>
+        </div>
+      </div>
       <Link to="/about" className="hidden mt-1 mr-4 md:block">
         <div className="flex flex-row items-center justify-center group">
           <AiOutlineInfoCircle fontSize={24} className="group-hover:text-gray-600" />
