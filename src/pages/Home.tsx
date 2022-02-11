@@ -2,8 +2,12 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useData } from '../context/DataContext';
 import { HiOutlineChevronLeft, HiOutlineChevronRight } from 'react-icons/hi';
-import WorldMap from 'react-svg-worldmap';
 import Loading from '../components/Loading';
+import WorldMap from 'react-svg-worldmap';
+import PieChart from '../components/PieChart/PieChart';
+import { Chart, ArcElement, Tooltip, Legend } from 'chart.js';
+
+Chart.register(ArcElement, Tooltip, Legend);
 
 const Home = () => {
   const navigate = useNavigate();
@@ -65,7 +69,9 @@ const Home = () => {
 
   const onClickCountry = (e: any) => {
     const name = countriesData.find((c) => c.countryInfo.iso2 === e.countryCode)?.country;
-    navigate(`/${name}`);
+    if (name) {
+      navigate(`/${name}`);
+    }
   };
   
   const prevLocation = () => {
@@ -106,38 +112,56 @@ const Home = () => {
   }
 
   return (
-    <div className="flex flex-col items-center">
-      <div className="flex">
-        <button type="button" onClick={prevLocation}>
+    <div className="flex-1 flex flex-col items-center">
+      <div className="flex items-center justify-center">
+        <button type="button" className="p-1 rounded-full hover:bg-gray-200" onClick={prevLocation}>
           <HiOutlineChevronLeft fontSize={24} />
         </button>
-        <p>{selectedLocation}</p>
-        <button type="button" onClick={nextLocation}>
+        <p className="w-48 py-8 text-center text-xl">{selectedLocation}</p>
+        <button type="button" className="p-1 rounded-full hover:bg-gray-200" onClick={nextLocation}>
           <HiOutlineChevronRight fontSize={24} />
         </button>
       </div>
-      <div className="flex items-center justify-center">
-        <div>
+      <div className="w-full flex flex-col xl:flex-row items-center justify-center">
+        <div className="hidden sm:block">
           <WorldMap
             color="#AAAA00"
-            size="xl"
+            size="responsive"
             data={worldMapData}
-            valueSuffix="Contaminados"
+            valueSuffix="Casos"
             onClickFunction={onClickCountry}
             backgroundColor="#DDEEFF"
             tooltipBgColor="white"
             tooltipTextColor="black"
           />
         </div>
-        <div>
-          <p>{selectedLocationData.cases} casos confirmados</p>
-          <div>
-            <p>recuperados: {selectedLocationData.recovered}</p>
-            <p>infectados: {selectedLocationData.active}</p>
-            <p>mortos: {selectedLocationData.deaths}</p>
+        <div className="text-lg sm:text-2xl mt-4 sm:mt-8 xl:ml-20">
+          <p className="text-center">{Intl.NumberFormat().format(selectedLocationData.cases)} Casos confirmados</p>
+          <div className="my-8">
+            <PieChart
+              data={{
+                datasets: [{
+                  data: [selectedLocationData.recovered, selectedLocationData.active, selectedLocationData.deaths],
+                  backgroundColor: [
+                    'rgba(54, 162, 235, 0.5)',
+                    'rgba(255, 206, 86, 0.5)',
+                    'rgba(255, 99, 132, 0.5)',
+                  ],
+                  borderColor: [
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(255, 99, 132, 1)',
+                  ],
+                  borderWidth: 2,
+                }],
+                labels: [
+                  'Recuperados',
+                  'Infectados',
+                  'Mortos'
+                ],
+              }}
+            />
           </div>
-          <p>{selectedLocationData.tests} teste aplicados</p>
-          <p>{selectedLocationData.vaccineCoverage} doses de vacinas aplicadas</p>
         </div>
       </div>
     </div>
