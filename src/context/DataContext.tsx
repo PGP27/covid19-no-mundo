@@ -3,8 +3,10 @@ import { createContext, ReactNode, useContext, useEffect, useState } from 'react
 interface DataContextProps {
   loading: boolean,
   globalData: GlobalDataProps,
+  globalVaccineData: any,
   continentsData: ContinentsDataProps[],
   countriesData: CountriesDataProps[],
+  countriesVaccineData: any,
 };
 
 interface GlobalDataProps {
@@ -68,25 +70,32 @@ const DataContext = createContext({} as DataContextProps);
 const DataProvider = ({ children }: DataProviderProps) => {
   const [loading, setLoading] = useState(false);
   const [globalData, setGlobalData] = useState<GlobalDataProps>({} as GlobalDataProps);
+  const [globalVaccineData, setGlobalVaccineData] = useState<any>({});
   const [continentsData, setContinentsData] = useState<Array<ContinentsDataProps>>([] as ContinentsDataProps[]);
   const [countriesData, setCountriesData] = useState<Array<CountriesDataProps>>([] as CountriesDataProps[]);
+  const [countriesVaccineData, setCountriesVaccineData] = useState<any>([]);
+
+  const getDatas = async () => {
+    setLoading(true);
+    const global = await fetchAPI('https://disease.sh/v3/covid-19/all');
+    const globalVaccine = await fetchAPI('https://disease.sh/v3/covid-19/vaccine/coverage');
+    const continents = await fetchAPI('https://disease.sh/v3/covid-19/continents');
+    const countries = await fetchAPI('https://disease.sh/v3/covid-19/countries');
+    const countriesVaccine = await fetchAPI('https://disease.sh/v3/covid-19/vaccine/coverage/countries');
+    setGlobalData(global);
+    setGlobalVaccineData(globalVaccine)
+    setContinentsData(continents);
+    setCountriesData(countries);
+    setCountriesVaccineData(countriesVaccine);
+    setLoading(false);
+  };
 
   useEffect(() => {
-    const getDatas = async () => {
-      setLoading(true);
-      const global = await fetchAPI('https://disease.sh/v3/covid-19/all');
-      const continents = await fetchAPI('https://disease.sh/v3/covid-19/continents');
-      const countries = await fetchAPI('https://disease.sh/v3/covid-19/countries');
-      setGlobalData(global);
-      setContinentsData(continents);
-      setCountriesData(countries);
-      setLoading(false);
-    };
     getDatas();
   }, []);
 
   return(
-    <DataContext.Provider value={{ loading, globalData, continentsData, countriesData }}>
+    <DataContext.Provider value={{ loading, globalData, globalVaccineData, continentsData, countriesData, countriesVaccineData }}>
       {children}
     </DataContext.Provider>
   );
