@@ -1,9 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useData } from '../../context/DataContext';
 import { MdOutlineCoronavirus } from 'react-icons/md';
 import { AiOutlineInfoCircle } from 'react-icons/ai';
 import { FiMenu } from 'react-icons/fi';
+import { FaHome } from 'react-icons/fa';
+import { GrSearchAdvanced } from 'react-icons/gr';
 import SearchBar from './SearchBar';
 import CountriesList from './CountriesList';
 
@@ -12,6 +14,7 @@ const Header = () => {
   const [searchText, setSearchText] = useState('');
   const [openCountriesList, setOpenCountriesList] = useState(false);
   const { countriesData } = useData();
+  const navigate = useNavigate();
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -74,17 +77,31 @@ const Header = () => {
       >
         <FiMenu fontSize={24} className="group-hover:text-gray-600"/>
       </button>
-      <div className="mobile-menu absolute w-full flex flex-col bg-gray-700 text-white z-10 top-[48px] left-0 transform -translate-x-full transition duration-300 ease-in-out md:hidden">
-        <div>
-          <p>Home</p>
-        </div>
-        <div>
-          <p>Sobre</p>
+      <div className="mobile-menu absolute w-full flex flex-col bg-gray-100 border border-black z-10 top-[58px] left-0 transform -translate-x-full transition duration-300 ease-in-out md:hidden">
+        <button type="button" className="flex items-center p-3 hover:bg-blue-100" onClick={() => {
+          const menu = document.querySelector('.mobile-menu');
+          menu?.classList.toggle('-translate-x-full');
+          navigate('/');
+        }}>
+          <FaHome fontSize={20} />
+          <p className="ml-3">Home</p>
+        </button>
+        <button type="button" className="flex items-center p-3 hover:bg-blue-100" onClick={() => {
+          const menu = document.querySelector('.mobile-menu');
+          menu?.classList.toggle('-translate-x-full');
+          navigate('/about');
+        }}>
           <AiOutlineInfoCircle fontSize={20} />
-        </div>
-        <div>
-          <p>Busca avançada</p>
-        </div>
+          <p className="ml-3">Sobre</p>
+        </button>
+        <button type="button" className="flex items-center p-3 hover:bg-blue-100"  onClick={() => {
+          const menu = document.querySelector('.mobile-menu');
+          menu?.classList.toggle('-translate-x-full');
+          navigate('/advancedSearch');
+        }}>
+          <GrSearchAdvanced fontSize={20} />
+          <p className="ml-3">Busca avançada</p>
+        </button>
       </div>
       <Link to="/about" className="hidden mt-1 mr-4 md:block">
         <div className="flex flex-row items-center justify-center group">

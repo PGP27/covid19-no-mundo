@@ -135,9 +135,9 @@ const Home = () => {
             tooltipTextColor="black"
           />
         </div>
-        <div className="text-lg sm:text-2xl mt-4 sm:mt-8 xl:ml-20">
+        <div className="w-80 flex flex-col items-center text-lg sm:text-xl mt-4 sm:mt-8 lg:mt-0 xl:ml-20">
           <p className="text-center">{Intl.NumberFormat().format(selectedLocationData.cases)} Casos confirmados</p>
-          <div className="my-8">
+          <div className="w-64 my-8">
             <PieChart
               data={{
                 datasets: [{
