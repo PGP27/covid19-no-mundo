@@ -3,7 +3,7 @@ import { createContext, ReactNode, useContext, useEffect, useState } from 'react
 interface DataContextProps {
   loading: boolean,
   globalData: GlobalDataProps,
-  globalVaccineData: any,
+  globalHistoric: GlobalHistoricProps,
   continentsData: ContinentsDataProps[],
   countriesData: CountriesDataProps[],
   countriesVaccineData: any,
@@ -31,6 +31,12 @@ interface GlobalDataProps {
   recoveredPerOneMillion: number,
   criticalPerOneMillion: number,
   affectedCountries: number,
+};
+
+interface GlobalHistoricProps {
+  cases: any,
+  deaths: any,
+  recovered: any,
 };
 
 interface ContinentsDataProps extends Omit<GlobalDataProps, 'affectedCountries' | 'oneCasePerPeople' | 'oneDeathPerPeople' | 'oneTestPerPeople'> {
@@ -70,7 +76,7 @@ const DataContext = createContext({} as DataContextProps);
 const DataProvider = ({ children }: DataProviderProps) => {
   const [loading, setLoading] = useState(false);
   const [globalData, setGlobalData] = useState<GlobalDataProps>({} as GlobalDataProps);
-  const [globalVaccineData, setGlobalVaccineData] = useState<any>({});
+  const [globalHistoric, setGlobalHistoric] = useState<GlobalHistoricProps>({} as GlobalHistoricProps);
   const [continentsData, setContinentsData] = useState<Array<ContinentsDataProps>>([] as ContinentsDataProps[]);
   const [countriesData, setCountriesData] = useState<Array<CountriesDataProps>>([] as CountriesDataProps[]);
   const [countriesVaccineData, setCountriesVaccineData] = useState<any>([]);
@@ -78,24 +84,24 @@ const DataProvider = ({ children }: DataProviderProps) => {
   const getDatas = async () => {
     setLoading(true);
     const global = await fetchAPI('https://disease.sh/v3/covid-19/all');
-    const globalVaccine = await fetchAPI('https://disease.sh/v3/covid-19/vaccine/coverage');
+    const globalHist = await fetchAPI('https://disease.sh/v3/covid-19/historical/all');
     const continents = await fetchAPI('https://disease.sh/v3/covid-19/continents');
     const countries = await fetchAPI('https://disease.sh/v3/covid-19/countries');
     const countriesVaccine = await fetchAPI('https://disease.sh/v3/covid-19/vaccine/coverage/countries');
     setGlobalData(global);
-    setGlobalVaccineData(globalVaccine)
+    setGlobalHistoric(globalHist);
     setContinentsData(continents);
     setCountriesData(countries);
     setCountriesVaccineData(countriesVaccine);
     setLoading(false);
   };
-
+  
   useEffect(() => {
     getDatas();
   }, []);
 
   return(
-    <DataContext.Provider value={{ loading, globalData, globalVaccineData, continentsData, countriesData, countriesVaccineData }}>
+    <DataContext.Provider value={{ loading, globalData, globalHistoric, continentsData, countriesData, countriesVaccineData }}>
       {children}
     </DataContext.Provider>
   );

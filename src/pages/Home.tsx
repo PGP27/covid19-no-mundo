@@ -5,39 +5,25 @@ import { HiOutlineChevronLeft, HiOutlineChevronRight } from 'react-icons/hi';
 import Loading from '../components/Loading';
 import WorldMap from 'react-svg-worldmap';
 import PieChart from '../components/PieChart/PieChart';
-import { Chart, ArcElement, Tooltip, Legend } from 'chart.js';
+import BarChart from '../components/BarChart';
+import { Chart, CategoryScale, LinearScale, BarElement, PointElement, LineElement, Title, ArcElement, Tooltip, Legend } from 'chart.js';
 
 Chart.register(ArcElement, Tooltip, Legend);
+Chart.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
+Chart.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
 const Home = () => {
   const navigate = useNavigate();
-  const { loading, globalData, globalVaccineData, continentsData, countriesData, countriesVaccineData } = useData();
+  const { loading, globalData, globalHistoric, continentsData, countriesData } = useData();
   const [selectedLocation, setSelectedLocation] = useState('World');
   const [selectedLocationData, setSelectedLocationData] = useState<any>({});
   const [worldMapData, setWorldMapData] = useState<any>([]);
   
   const getLocationData = () => {
     if (selectedLocation === 'World') {
-      setSelectedLocationData({
-        ...globalData,
-        vaccineCoverage: Object.values(globalVaccineData)[Object.values(globalVaccineData).length - 1],
-      });
+      setSelectedLocationData(globalData);
     } else {
-      let count = 0;
-      const filter = countriesVaccineData.filter((coun: any) => continentsData.find((cont) => cont.continent === selectedLocation)?.countries.includes(coun.country));
-      if (filter && filter[0]) {
-        interface CProps {
-          country: string,
-          timeline: number[],
-        };
-        filter.forEach((c: CProps) => {
-          count += Object.values(c.timeline)[Object.values(c.timeline).length - 1]
-        });
-      }
-      setSelectedLocationData({
-        ...continentsData.find((c) => c.continent === selectedLocation),
-        vaccineCoverage: count,
-      });
+      setSelectedLocationData(continentsData.find((c) => c.continent === selectedLocation));
     }
   };
 
@@ -102,70 +88,115 @@ const Home = () => {
     }
   };
 
+  const getObjValuesDif = (obj: any) => {
+    const values = Object.values(obj) as any;
+    const valuesWithNull = values.map((value: any, index: number) => {
+      if (index !== 0) {
+        if (value - values[index - 1] >= 0) {
+          return value - values[index - 1];
+        } else {
+          return 0;
+        }
+      }
+      return null;
+    });
+    const newValues = valuesWithNull.filter((_value: any, index: number) => index !== 0);
+    return newValues.reduce((acc: number, v: number) => acc + v);
+  };
+
   useEffect(() => {
     buildWorldMap();
     getLocationData();
-  }, [selectedLocation, globalData, globalVaccineData, continentsData, countriesData, countriesVaccineData]);
+  }, [selectedLocation, globalData, continentsData, countriesData]);
 
   if (loading) {
     return  <Loading />;
   }
 
-  return (
-    <div className="flex-1 flex flex-col items-center">
-      <div className="flex items-center justify-center">
-        <button type="button" className="p-1 rounded-full hover:bg-gray-200" onClick={prevLocation}>
-          <HiOutlineChevronLeft fontSize={24} />
-        </button>
-        <p className="w-48 py-8 text-center text-xl">{selectedLocation}</p>
-        <button type="button" className="p-1 rounded-full hover:bg-gray-200" onClick={nextLocation}>
-          <HiOutlineChevronRight fontSize={24} />
-        </button>
-      </div>
-      <div className="w-full flex flex-col xl:flex-row items-center justify-center">
-        <div className="hidden sm:block">
-          <WorldMap
-            color="#AAAA00"
-            size="responsive"
-            data={worldMapData}
-            valueSuffix="Casos"
-            onClickFunction={onClickCountry}
-            backgroundColor="#DDEEFF"
-            tooltipBgColor="white"
-            tooltipTextColor="black"
-          />
+  if (globalHistoric.cases) {
+    return (
+      <div className="flex-1 flex flex-col items-center">
+        <div className="flex items-center justify-center">
+          <button type="button" className="p-1 rounded-full hover:bg-gray-200" onClick={prevLocation}>
+            <HiOutlineChevronLeft fontSize={24} />
+          </button>
+          <p className="w-48 py-8 text-center text-xl">{selectedLocation}</p>
+          <button type="button" className="p-1 rounded-full hover:bg-gray-200" onClick={nextLocation}>
+            <HiOutlineChevronRight fontSize={24} />
+          </button>
         </div>
-        <div className="w-80 flex flex-col items-center text-lg sm:text-xl mt-4 sm:mt-8 lg:mt-0 xl:ml-20">
-          <p className="text-center">{Intl.NumberFormat().format(selectedLocationData.cases)} Casos confirmados</p>
-          <div className="w-64 my-8">
-            <PieChart
-              data={{
-                datasets: [{
-                  data: [selectedLocationData.recovered, selectedLocationData.active, selectedLocationData.deaths],
-                  backgroundColor: [
-                    'rgba(54, 162, 235, 0.5)',
-                    'rgba(255, 206, 86, 0.5)',
-                    'rgba(255, 99, 132, 0.5)',
-                  ],
-                  borderColor: [
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(255, 99, 132, 1)',
-                  ],
-                  borderWidth: 2,
-                }],
-                labels: [
-                  'Recuperados',
-                  'Infectados',
-                  'Mortos'
-                ],
-              }}
+        <div className="w-full flex flex-col xl:flex-row items-center justify-center">
+          <div className="hidden sm:block">
+            <WorldMap
+              color="#AAAA00"
+              size="responsive"
+              data={worldMapData}
+              valueSuffix="Casos"
+              onClickFunction={onClickCountry}
+              tooltipBgColor="white"
+              tooltipTextColor="black"
             />
+          </div>
+          <div className="w-80 flex flex-col items-center text-lg sm:text-xl mt-4 sm:mt-8 lg:mt-0 xl:ml-20">
+            <p className="text-center">{Intl.NumberFormat().format(selectedLocationData.cases)} Casos confirmados</p>
+            <div className="w-64 my-8">
+              <PieChart
+                data={{
+                  datasets: [{
+                    data: [selectedLocationData.recovered, selectedLocationData.active, selectedLocationData.deaths],
+                    backgroundColor: [
+                      'rgba(54, 162, 235, 0.5)',
+                      'rgba(255, 206, 86, 0.5)',
+                      'rgba(255, 99, 132, 0.5)',
+                    ],
+                    borderColor: [
+                      'rgba(54, 162, 235, 1)',
+                      'rgba(255, 206, 86, 1)',
+                      'rgba(255, 99, 132, 1)',
+                    ],
+                    borderWidth: 2,
+                  }],
+                  labels: [
+                    'Recuperados',
+                    'Infectados',
+                    'Mortos'
+                  ],
+                }}
+              />
+            </div>
+          </div>
+        </div>
+        <div className="my-10 w-[900px] flex flex-col justify-center border-t border-black">
+          <p className="mt-20 text-2xl">Histórico global:</p>
+          <p className="text-base">(últimos 29 dias)*</p>
+          <div className="mt-20">
+            <p className="text-4xl">{Intl.NumberFormat().format(getObjValuesDif(globalHistoric.cases))}</p>
+            <p className="text-xl">Novos casos*</p>
+            <div className="hidden xl:flex w-[900px]">
+              <BarChart
+                data={globalHistoric.cases}
+                label="Casos"
+                color="rgb(200, 150, 100)"
+              />
+            </div>
+          </div>
+          <div className="mt-20">
+            <p className="text-4xl">{Intl.NumberFormat().format(getObjValuesDif(globalHistoric.deaths))}</p>
+            <p className="text-xl">Mortos*</p>
+            <div className="hidden xl:flex w-[900px]">
+              <BarChart
+                data={globalHistoric.deaths}
+                label="Mortes"
+                color="rgb(200, 100, 100)"
+              />
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  );
+    );
+  }
+
+  return null;
 };
 
 export default Home;
