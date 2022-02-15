@@ -166,24 +166,28 @@ const Home = () => {
             </div>
           </div>
         </div>
-        <div className="my-10 w-[900px] flex flex-col justify-center border-t border-black">
+        <div className="hidden my-10 px-10 xl:flex flex-col justify-center border-t border-gray-500">
           <p className="mt-20 text-2xl">Histórico global:</p>
           <p className="text-base">(últimos 29 dias)*</p>
-          <div className="mt-20">
-            <p className="text-4xl">{Intl.NumberFormat().format(getObjValuesDif(globalHistoric.cases))}</p>
-            <p className="text-xl">Novos casos*</p>
-            <div className="hidden xl:flex w-[900px]">
+          <div className="flex items-center justify-between">
+            <div className="p-8">
+              <p className="text-4xl">{Intl.NumberFormat().format(getObjValuesDif(globalHistoric.cases))}</p>
+              <p className="text-xl">Novos casos*</p>
+            </div>
+            <div className="w-[900px]">
               <BarChart
                 data={globalHistoric.cases}
                 label="Casos"
-                color="rgb(200, 150, 100)"
+                color="rgb(200, 150, 50)"
               />
             </div>
           </div>
-          <div className="mt-20">
-            <p className="text-4xl">{Intl.NumberFormat().format(getObjValuesDif(globalHistoric.deaths))}</p>
-            <p className="text-xl">Mortos*</p>
-            <div className="hidden xl:flex w-[900px]">
+          <div className="flex items-center justify-between mt-10">
+            <div className="p-8">
+              <p className="text-4xl">{Intl.NumberFormat().format(getObjValuesDif(globalHistoric.deaths))}</p>
+              <p className="text-xl">Mortos*</p>
+            </div>
+            <div className="w-[900px]">
               <BarChart
                 data={globalHistoric.deaths}
                 label="Mortes"
