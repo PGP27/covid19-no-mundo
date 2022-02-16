@@ -77,31 +77,33 @@ const Header = () => {
       >
         <FiMenu fontSize={24} className="group-hover:text-gray-600"/>
       </button>
-      <div className="mobile-menu absolute w-full flex flex-col bg-gray-100 border border-black z-10 top-[58px] left-0 transform -translate-x-full transition duration-300 ease-in-out md:hidden">
-        <button type="button" className="flex items-center p-3 hover:bg-blue-100" onClick={() => {
-          const menu = document.querySelector('.mobile-menu');
-          menu?.classList.toggle('-translate-x-full');
-          navigate('/');
-        }}>
-          <FaHome fontSize={20} />
-          <p className="ml-3">Home</p>
-        </button>
-        <button type="button" className="flex items-center p-3 hover:bg-blue-100" onClick={() => {
-          const menu = document.querySelector('.mobile-menu');
-          menu?.classList.toggle('-translate-x-full');
-          navigate('/about');
-        }}>
-          <AiOutlineInfoCircle fontSize={20} />
-          <p className="ml-3">Sobre</p>
-        </button>
-        <button type="button" className="flex items-center p-3 hover:bg-blue-100"  onClick={() => {
-          const menu = document.querySelector('.mobile-menu');
-          menu?.classList.toggle('-translate-x-full');
-          navigate('/advancedSearch');
-        }}>
-          <GrSearchAdvanced fontSize={20} />
-          <p className="ml-3">Busca avançada</p>
-        </button>
+      <div className="mobile-menu absolute w-full flex flex-col px-4 z-10 top-[58px] left-0 transform -translate-x-full transition duration-300 ease-in-out md:hidden">
+        <div className="bg-gray-100 border">
+          <button type="button" className="w-full flex items-center p-3 hover:bg-sky-100" onClick={() => {
+            const menu = document.querySelector('.mobile-menu');
+            menu?.classList.toggle('-translate-x-full');
+            navigate('/');
+          }}>
+            <FaHome fontSize={20} />
+            <p className="ml-3">Home</p>
+          </button>
+          <button type="button" className="w-full flex items-center p-3 hover:bg-sky-100" onClick={() => {
+            const menu = document.querySelector('.mobile-menu');
+            menu?.classList.toggle('-translate-x-full');
+            navigate('/about');
+          }}>
+            <AiOutlineInfoCircle fontSize={20} />
+            <p className="ml-3">Sobre</p>
+          </button>
+          <button type="button" className="w-full flex items-center p-3 hover:bg-sky-100"  onClick={() => {
+            const menu = document.querySelector('.mobile-menu');
+            menu?.classList.toggle('-translate-x-full');
+            navigate('/advancedSearch');
+          }}>
+            <GrSearchAdvanced fontSize={20} />
+            <p className="ml-3">Busca avançada</p>
+          </button>
+        </div>
       </div>
       <Link to="/about" className="hidden mt-1 mr-4 md:block">
         <div className="flex flex-row items-center justify-center group">

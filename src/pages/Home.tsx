@@ -15,12 +15,12 @@ Chart.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Too
 const Home = () => {
   const navigate = useNavigate();
   const { loading, globalData, globalHistoric, continentsData, countriesData } = useData();
-  const [selectedLocation, setSelectedLocation] = useState('World');
+  const [selectedLocation, setSelectedLocation] = useState('Global');
   const [selectedLocationData, setSelectedLocationData] = useState<any>({});
   const [worldMapData, setWorldMapData] = useState<any>([]);
   
   const getLocationData = () => {
-    if (selectedLocation === 'World') {
+    if (selectedLocation === 'Global') {
       setSelectedLocationData(globalData);
     } else {
       setSelectedLocationData(continentsData.find((c) => c.continent === selectedLocation));
@@ -28,7 +28,7 @@ const Home = () => {
   };
 
   const buildWorldMap = () => {
-    if (selectedLocation === 'World') {
+    if (selectedLocation === 'Global') {
       const data = countriesData.map((c) => {
         if (typeof c.countryInfo.iso2 === 'string' && typeof c.cases === 'number') {
           return {
@@ -65,7 +65,7 @@ const Home = () => {
     if (currentLocationObj) {
       const index = continentsData.indexOf(currentLocationObj);
       if (index === 0) {
-        setSelectedLocation('World');
+        setSelectedLocation('Global');
       } else {
         setSelectedLocation(continentsData[index - 1].continent);
       }
@@ -79,7 +79,7 @@ const Home = () => {
     if (currentLocationObj) {
       const index = continentsData.indexOf(currentLocationObj);
       if (index === continentsData.length - 1) {
-        setSelectedLocation('World');
+        setSelectedLocation('Global');
       } else {
         setSelectedLocation(continentsData[index + 1].continent);
       }
@@ -137,7 +137,7 @@ const Home = () => {
               tooltipTextColor="black"
             />
           </div>
-          <div className="w-80 flex flex-col items-center text-lg sm:text-xl mt-4 sm:mt-8 lg:mt-0 xl:ml-20">
+          <div className="w-80 flex flex-col items-center text-lg sm:text-xl mt-4 sm:mt-10 lg:mt-0 xl:ml-20">
             <p className="text-center">{Intl.NumberFormat().format(selectedLocationData.cases)} Casos confirmados</p>
             <div className="w-64 my-8">
               <PieChart
@@ -166,7 +166,15 @@ const Home = () => {
             </div>
           </div>
         </div>
-        <div className="hidden my-10 px-10 xl:flex flex-col justify-center border-t border-gray-500">
+        <div className="border-t pt-10 xl:hidden">
+          <p className="text-2xl">Histórico global:</p>
+          <p className="text-base">(últimos 29 dias)*</p>
+          <div className="flex flex-col sm:flex-row mt-10 sm:mb-10">
+            <p className="text-xl p-4 sm:px-10">{Intl.NumberFormat().format(getObjValuesDif(globalHistoric.cases))} Novos casos*</p>
+            <p className="text-xl p-4 sm:px-10">{Intl.NumberFormat().format(getObjValuesDif(globalHistoric.deaths))} Mortos*</p>
+          </div>
+        </div>
+        <div className="hidden my-10 px-10 xl:flex flex-col justify-center border-t">
           <p className="mt-20 text-2xl">Histórico global:</p>
           <p className="text-base">(últimos 29 dias)*</p>
           <div className="flex items-center justify-between">
