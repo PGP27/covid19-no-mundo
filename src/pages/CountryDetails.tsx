@@ -1,19 +1,56 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useData } from '../context/DataContext';
 import Loading from '../components/Loading';
 import PieChart from '../components/PieChart/PieChart';
+import BarChart from '../components/BarChart';
 
 const CountryDetails = () => {
   const { country } = useParams();
   const { countriesData, countriesVaccineData } = useData();
+  const [countryHistory, setCountryHistory] = useState<any>();
+  const [loading, setLoading] = useState<any>(false);
+
   const currentCountry = useMemo(() => {
     return countriesData.find((c) => c.country === country);
   }, [countriesData, country]);
 
-  if (currentCountry) {
+  const getCountryHistory = async () => {
+    setLoading(true);
+    const response = await fetch(`https://disease.sh/v3/covid-19/historical/${country}`);
+    const obj = await response.json();
+    setCountryHistory(obj);
+    setLoading(false);
+  }
+
+  const getObjValuesDif = (obj: any) => {
+    const values = Object.values(obj) as any;
+    const valuesWithNull = values.map((value: any, index: number) => {
+      if (index !== 0) {
+        if (value - values[index - 1] >= 0) {
+          return value - values[index - 1];
+        } else {
+          return 0;
+        }
+      }
+      return null;
+    });
+    const newValues = valuesWithNull.filter((_value: any, index: number) => index !== 0);
+    return newValues.reduce((acc: number, v: number) => acc + v);
+  };
+
+
+  useEffect(() => {
+    getCountryHistory();
+  }, [country]);
+
+  if (loading) {
+    return <Loading />;
+  }
+
+  if (currentCountry && countryHistory) {
     return (
-      <div className="flex-1 mt-10">
+      <div className="flex-1 flex flex-col items-center mt-10">
         <div className="xl:flex items-center justify-center">
           <div className="flex flex-col md:flex-row items-center justify-center">
             <img
@@ -70,11 +107,56 @@ const CountryDetails = () => {
             </div>
           </div>
         </div>
+        {countryHistory.message && (
+          <p>Esse país não possui dados históricos</p>
+        )}
+        {!countryHistory.message && (
+          <div>
+            <div className="border-t pt-10 xl:hidden">
+              <p className="text-2xl">Histórico global:</p>
+              <p className="text-base">(últimos 29 dias)*</p>
+              <div className="flex flex-col sm:flex-row mt-10 sm:mb-10">
+                <p className="text-xl p-4 sm:px-10">{Intl.NumberFormat().format(getObjValuesDif(countryHistory.timeline.cases))} Novos casos*</p>
+                <p className="text-xl p-4 sm:px-10">{Intl.NumberFormat().format(getObjValuesDif(countryHistory.timeline.deaths))} Mortos*</p>
+              </div>
+            </div>
+            <div className="hidden my-10 px-10 xl:flex flex-col justify-center border-t">
+              <p className="mt-20 text-2xl">Histórico:</p>
+              <p className="text-base">(últimos 29 dias)*</p>
+              <div className="flex items-center justify-between">
+                <div className="p-8">
+                  <p className="text-4xl">{Intl.NumberFormat().format(getObjValuesDif(countryHistory.timeline.cases))}</p>
+                  <p className="text-xl">Novos casos*</p>
+                </div>
+                <div className="w-[900px]">
+                  <BarChart
+                    data={countryHistory.timeline.cases}
+                    label="Casos"
+                    color="rgb(200, 150, 50)"
+                  />
+                </div>
+              </div>
+              <div className="flex items-center justify-between mt-10">
+                <div className="p-8">
+                  <p className="text-4xl">{Intl.NumberFormat().format(getObjValuesDif(countryHistory.timeline.deaths))}</p>
+                  <p className="text-xl">Mortos*</p>
+                </div>
+                <div className="w-[900px]">
+                  <BarChart
+                    data={countryHistory.timeline.deaths}
+                    label="Mortes"
+                    color="rgb(200, 100, 100)"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     );
   }
 
-  return <Loading />;
+  return null;
 };
 
 export default CountryDetails;
