@@ -108,7 +108,7 @@ const CountryDetails = () => {
           </div>
         </div>
         {countryHistory.message && (
-          <p>Esse país não possui dados históricos</p>
+          <p className="my-10 px-10 text-center text-xl">Esse país não possui dados históricos.</p>
         )}
         {!countryHistory.message && (
           <div>
