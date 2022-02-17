@@ -208,7 +208,7 @@ const Home = () => {
     );
   }
 
-  return null;
+  return <Loading />;
 };
 
 export default Home;

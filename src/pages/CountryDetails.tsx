@@ -74,7 +74,7 @@ const CountryDetails = () => {
     );
   }
 
-  return <Loading />
+  return <Loading />;
 };
 
 export default CountryDetails;

@@ -10,12 +10,11 @@ import SearchBar from './SearchBar';
 import CountriesList from './CountriesList';
 
 const Header = () => {
-  const [menuOpen, setMenuOpen] = useState(false);
   const [searchText, setSearchText] = useState('');
   const [openCountriesList, setOpenCountriesList] = useState(false);
   const { countriesData } = useData();
-  const navigate = useNavigate();
   const ref = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleChangeCountriesListWidth = () => {

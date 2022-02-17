@@ -1,9 +1,10 @@
+import { useMemo } from 'react';
 import { BsSearch } from 'react-icons/bs';
 import { Link } from 'react-router-dom';
 
 const SearchBar = ({ searchText, onChange, onFocus }: any) => {
-  const searchBarDivStyles = 'group py-1 px-2 rounded-md cursor-text bg-gray-100  hover:bg-gray-200 focus-within:shadow-[0px_0px_3px_1px_rgba(0,0,0,0.5)] focus-within:bg-white focus-within:hover:bg-white';
-  const searchBarInputStyles = 'w-full flex-1 p-1 outline-none bg-gray-100 group-hover:bg-gray-200 focus-within:bg-white focus-within:group-hover:bg-white';
+  const searchBarDivStyles = useMemo(() => 'group py-1 px-2 rounded-md cursor-text bg-gray-100  hover:bg-gray-200 focus-within:shadow-[0px_0px_3px_1px_rgba(0,0,0,0.5)] focus-within:bg-white focus-within:hover:bg-white', []);
+  const searchBarInputStyles = useMemo(() => 'w-full flex-1 p-1 outline-none bg-gray-100 group-hover:bg-gray-200 focus-within:bg-white focus-within:group-hover:bg-white', []);
 
   return (
     <div className="flex-1">
