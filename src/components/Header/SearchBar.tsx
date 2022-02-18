@@ -24,7 +24,7 @@ const SearchBar = ({ searchText, onChange, onFocus }: any) => {
           onFocus={onFocus}
         />
       </div>
-      <p className="hidden md:block">...ou experimente a <Link to="/advancedSearch" className="text-cyan-400 hover:underline">Busca Avançada</Link></p>
+      <p className="hidden md:block">...ou experimente a <Link to="/advancedSearch" className="text-blue-800 hover:underline underline-offset-2">Busca Avançada</Link></p>
     </div>
   );
 }
