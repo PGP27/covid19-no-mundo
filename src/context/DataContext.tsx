@@ -6,7 +6,6 @@ interface DataContextProps {
   globalHistoric: GlobalHistoricProps,
   continentsData: ContinentsDataProps[],
   countriesData: CountriesDataProps[],
-  countriesVaccineData: any,
 };
 
 interface GlobalDataProps {
@@ -79,7 +78,6 @@ const DataProvider = ({ children }: DataProviderProps) => {
   const [globalHistoric, setGlobalHistoric] = useState<GlobalHistoricProps>({} as GlobalHistoricProps);
   const [continentsData, setContinentsData] = useState<Array<ContinentsDataProps>>([] as ContinentsDataProps[]);
   const [countriesData, setCountriesData] = useState<Array<CountriesDataProps>>([] as CountriesDataProps[]);
-  const [countriesVaccineData, setCountriesVaccineData] = useState<any>([]);
 
   const getDatas = async () => {
     setLoading(true);
@@ -92,7 +90,6 @@ const DataProvider = ({ children }: DataProviderProps) => {
     setGlobalHistoric(globalHist);
     setContinentsData(continents);
     setCountriesData(countries);
-    setCountriesVaccineData(countriesVaccine);
     setLoading(false);
   };
   
@@ -101,7 +98,7 @@ const DataProvider = ({ children }: DataProviderProps) => {
   }, []);
 
   return(
-    <DataContext.Provider value={{ loading, globalData, globalHistoric, continentsData, countriesData, countriesVaccineData }}>
+    <DataContext.Provider value={{ loading, globalData, globalHistoric, continentsData, countriesData }}>
       {children}
     </DataContext.Provider>
   );

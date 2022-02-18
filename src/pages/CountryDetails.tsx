@@ -7,19 +7,23 @@ import BarChart from '../components/BarChart';
 
 const CountryDetails = () => {
   const { country } = useParams();
-  const { countriesData, countriesVaccineData } = useData();
+  const { countriesData } = useData();
   const [countryHistory, setCountryHistory] = useState<any>();
+  const [countryVaccineHistory, setCountryVaccineHistory] = useState<any>();
   const [loading, setLoading] = useState<any>(false);
-
+  
   const currentCountry = useMemo(() => {
     return countriesData.find((c) => c.country === country);
   }, [countriesData, country]);
 
-  const getCountryHistory = async () => {
+  const getCountryHistorys = async () => {
     setLoading(true);
-    const response = await fetch(`https://disease.sh/v3/covid-19/historical/${country}`);
-    const obj = await response.json();
-    setCountryHistory(obj);
+    const response1 = await fetch(`https://disease.sh/v3/covid-19/historical/${country}`);
+    const obj1 = await response1.json();
+    setCountryHistory(obj1);
+    const response2 = await fetch(`https://disease.sh/v3/covid-19/vaccine/coverage/countries/${country}`);
+    const obj2 = await response2.json();
+    setCountryVaccineHistory(obj2);
     setLoading(false);
   }
 
@@ -41,14 +45,14 @@ const CountryDetails = () => {
 
 
   useEffect(() => {
-    getCountryHistory();
+    getCountryHistorys();
   }, [country]);
 
   if (loading) {
     return <Loading />;
   }
 
-  if (currentCountry && countryHistory) {
+  if (currentCountry && countryHistory && countryVaccineHistory) {
     return (
       <div className="flex-1 flex flex-col items-center mt-10">
         <div className="xl:flex items-center justify-center">
@@ -107,17 +111,18 @@ const CountryDetails = () => {
             </div>
           </div>
         </div>
-        {countryHistory.message && (
+        {(countryHistory.message || countryVaccineHistory.message) && (
           <p className="my-10 px-10 text-center text-xl">Esse país não possui dados históricos.</p>
         )}
-        {!countryHistory.message && (
+        {(!countryHistory.message && !countryVaccineHistory.message) && (
           <div>
             <div className="border-t pt-10 xl:hidden">
               <p className="text-2xl">Histórico global:</p>
               <p className="text-base">(últimos 29 dias)*</p>
-              <div className="flex flex-col sm:flex-row mt-10 sm:mb-10">
-                <p className="text-xl p-4 sm:px-10">{Intl.NumberFormat().format(getObjValuesDif(countryHistory.timeline.cases))} Novos casos*</p>
-                <p className="text-xl p-4 sm:px-10">{Intl.NumberFormat().format(getObjValuesDif(countryHistory.timeline.deaths))} Mortos*</p>
+              <div className="flex flex-col md:flex-row mt-10 md:mb-10">
+                <p className="text-xl p-4 md:px-10">{Intl.NumberFormat().format(getObjValuesDif(countryHistory.timeline.cases))} Novos casos*</p>
+                <p className="text-xl p-4 md:px-10">{Intl.NumberFormat().format(getObjValuesDif(countryHistory.timeline.deaths))} Mortos*</p>
+                <p className="text-xl p-4 md:px-10">{Intl.NumberFormat().format(getObjValuesDif(countryVaccineHistory.timeline))} Vacinas aplicadas*</p>
               </div>
             </div>
             <div className="hidden my-10 px-10 xl:flex flex-col justify-center border-t">
@@ -144,8 +149,21 @@ const CountryDetails = () => {
                 <div className="w-[900px]">
                   <BarChart
                     data={countryHistory.timeline.deaths}
-                    label="Mortes"
+                    label="Mortos"
                     color="rgb(200, 100, 100)"
+                  />
+                </div>
+              </div>
+              <div className="flex items-center justify-between mt-10">
+                <div className="p-8">
+                  <p className="text-4xl">{Intl.NumberFormat().format(getObjValuesDif(countryVaccineHistory.timeline))}</p>
+                  <p className="text-xl">Vacinas aplicadas*</p>
+                </div>
+                <div className="w-[900px]">
+                  <BarChart
+                    data={countryVaccineHistory.timeline}
+                    label="Vacinas aplicadas"
+                    color="rgb(150, 200, 150)"
                   />
                 </div>
               </div>
