@@ -9,7 +9,7 @@ const About = () => (
           Esse é um site com estatísticas da Covid-19 em todo o mundo.
           Aqui você encontra, em números e gráficos, os impactos nacionais, continentais e globais
           causados por esse vírus desde o início da pandemia até os dias de hoje.
-          Todos os dados presentes nesse site foram consumidos da API <a rel="noreferrer" href="https://corona.lmao.ninja/" target="_blank">disease.sh</a>.
+          Todos os dados presentes nesse site foram consumidos da API <a className="text-blue-800 hover:underline underline-offset-2" rel="noreferrer" href="https://corona.lmao.ninja/" target="_blank">disease.sh</a>.
           Website desenvolvido por Pedro Gonçalves Pereira, desenvolvedor de software e bacharel em ciência da computação.
         </p>
         <div>
