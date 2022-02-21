@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useData } from '../context/DataContext';
+import { VscWarning } from 'react-icons/vsc'
 import Loading from '../components/Loading';
 import PieChart from '../components/PieChart/PieChart';
 import BarChart from '../components/BarChart';
@@ -174,7 +175,13 @@ const CountryDetails = () => {
     );
   }
 
-  return null;
+  return (
+    <div className="flex-1 flex flex-col items-center justify-center text-center sm:text-xl">
+      <VscWarning fontSize={40} />
+      <p>País não encontrado.</p>
+      <p>Revise sua busca e tente novamente.</p>
+    </div>
+  );
 };
 
 export default CountryDetails;

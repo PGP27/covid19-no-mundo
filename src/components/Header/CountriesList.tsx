@@ -14,7 +14,7 @@ const CountriesList = ({ countries, searchText, onClick }: any) => {
           <ul className="">
             { filteredCountries.map(( { country, countryInfo: { flag } }: any) => {
               return (
-                <Link key={country} onClick={ onClick } to={`/${country}`}>
+                <Link key={country} onClick={ onClick } to={`/country/${country}`}>
                   <li className="flex items-center p-2 hover:bg-sky-100">
                     <img
                       src={ flag }

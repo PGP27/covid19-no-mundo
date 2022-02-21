@@ -56,7 +56,7 @@ const Home = () => {
   const onClickCountry = (e: any) => {
     const name = countriesData.find((c) => c.countryInfo.iso2 === e.countryCode)?.country;
     if (name && e.countryValue) {
-      navigate(`/${name}`);
+      navigate(`/country/${name}`);
     }
   };
   
