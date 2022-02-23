@@ -1,14 +1,15 @@
-import { useEffect, useRef } from 'react';
+import { useRef, useEffect } from 'react';
 import { useField } from '@unform/core';
+import ReactSelect from 'react-select';
 
-const InputForm = ({ name, label, placeholder }: any) => {
-  const inputRef = useRef(null);
+const SelectForm = ({ name, label, options, ...rest }: any) => {
+  const selectRef = useRef(null);
   const { fieldName, defaultValue, registerField } = useField(name);
 
   useEffect(() => {
     registerField({
       name: fieldName,
-      ref: inputRef,
+      ref: selectRef,
       getValue: ref => {
         return ref.current.value
       },
@@ -19,21 +20,21 @@ const InputForm = ({ name, label, placeholder }: any) => {
         ref.current.value = ''
       },
     })
-  }, [fieldName, registerField]);
-
+  }, [fieldName, registerField, rest.isMulti]);
+  
   return (
     <div className="flex flex-col">
       <label htmlFor={name}>{label}:</label>
-      <input
-        id={name}
-        name={name}
-        ref={inputRef}
+      <select
         defaultValue={defaultValue}
-        placeholder={placeholder}
+        ref={selectRef}
+        {...rest}
         className="mt-1 ring-1 ring-slate-400 p-2 rounded-md shadow-md outline-none focus:ring-2 focus:ring-sky-500"
-      />
+      >
+        {options.map((opt: any, index: number) => <option key={index}>{opt}</option>)}
+      </select>
     </div>
   );
 };
 
-export default InputForm;
+export default SelectForm;
