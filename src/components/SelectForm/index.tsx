@@ -1,6 +1,5 @@
 import { useRef, useEffect } from 'react';
 import { useField } from '@unform/core';
-import ReactSelect from 'react-select';
 
 const SelectForm = ({ name, label, options, ...rest }: any) => {
   const selectRef = useRef(null);
@@ -23,7 +22,7 @@ const SelectForm = ({ name, label, options, ...rest }: any) => {
   }, [fieldName, registerField, rest.isMulti]);
   
   return (
-    <div className="flex flex-col">
+    <div className="w-full flex flex-col">
       <label htmlFor={name}>{label}:</label>
       <select
         defaultValue={defaultValue}
@@ -31,6 +30,7 @@ const SelectForm = ({ name, label, options, ...rest }: any) => {
         {...rest}
         className="mt-1 ring-1 ring-slate-400 p-2 rounded-md shadow-md outline-none focus:ring-2 focus:ring-sky-500"
       >
+        <option>Qualquer</option>
         {options.map((opt: any, index: number) => <option key={index}>{opt}</option>)}
       </select>
     </div>

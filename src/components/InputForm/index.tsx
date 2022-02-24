@@ -22,7 +22,7 @@ const InputForm = ({ name, label, placeholder }: any) => {
   }, [fieldName, registerField]);
 
   return (
-    <div className="flex flex-col">
+    <div className="w-full flex flex-col">
       <label htmlFor={name}>{label}:</label>
       <input
         id={name}
