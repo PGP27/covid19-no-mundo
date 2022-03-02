@@ -107,7 +107,7 @@ const Header = () => {
       <Link to="/about" className="hidden mt-1 mr-4 md:block">
         <div className="flex flex-row items-center justify-center group">
           <AiOutlineInfoCircle fontSize={24} className="group-hover:text-gray-600" />
-          <h3 className={`text-xl ml-2 group-hover:text-gray-600`}>Sobre</h3>
+          <h1 className={`text-xl ml-2 group-hover:text-gray-600`}>Sobre</h1>
         </div>
       </Link>
     </header>

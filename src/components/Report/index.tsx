@@ -39,7 +39,7 @@ const Report = ({ data }: any) => {
               <td>{Intl.NumberFormat().format(d.active)}</td>
               <td>{Intl.NumberFormat().format(d.deaths)}</td>
               <td>
-                <Link to={`/country/${d.country}`}>
+                <Link aria-label={d.country} to={`/country/${d.country}`}>
                   <button type="button" className="border border-slate-400 rounded-md bg-white hover:bg-green-100 p-2">
                     <BsEyeFill fontSize={20} />
                   </button>

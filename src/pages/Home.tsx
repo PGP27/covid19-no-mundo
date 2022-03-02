@@ -117,11 +117,11 @@ const Home = () => {
     return (
       <div className="flex-1 flex flex-col items-center">
         <div className="flex items-center justify-center">
-          <button type="button" className="p-1 rounded-full hover:bg-gray-200" onClick={prevLocation}>
+          <button aria-label="Prev location" type="button" className="p-1 rounded-full hover:bg-gray-200" onClick={prevLocation}>
             <HiOutlineChevronLeft fontSize={24} />
           </button>
           <p className="w-48 py-8 text-center text-xl">{selectedLocation}</p>
-          <button type="button" className="p-1 rounded-full hover:bg-gray-200" onClick={nextLocation}>
+          <button aria-label="Next location" type="button" className="p-1 rounded-full hover:bg-gray-200" onClick={nextLocation}>
             <HiOutlineChevronRight fontSize={24} />
           </button>
         </div>
