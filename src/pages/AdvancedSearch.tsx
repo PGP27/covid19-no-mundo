@@ -1,12 +1,12 @@
-import { Form } from "@unform/web";
-import { useData } from "../context/DataContext";
+import { useState } from 'react';
+import { Form } from '@unform/web';
+import { useData } from '../context/DataContext';
 import { BsSearch } from 'react-icons/bs';
 import { AiOutlineClose } from 'react-icons/ai';
 import { populationAndTests, cases, recovered, active, deaths, today } from '../data';
-import InputForm from "../components/InputForm";
-import SelectForm from "../components/SelectForm";
-import { useState } from "react";
-import Report from "../components/Report";
+import InputForm from '../components/InputForm';
+import SelectForm from '../components/SelectForm';
+import Report from '../components/Report';
 
 const AdvancedSearch = () => {
   const { continentsData, countriesData } = useData();

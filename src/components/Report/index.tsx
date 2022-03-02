@@ -1,7 +1,7 @@
-import { useNavigate } from "react-router-dom";
+import { BsEyeFill } from 'react-icons/bs';
+import { Link } from 'react-router-dom';
 
 const Report = ({ data }: any) => {
-  const navigate = useNavigate();
   return (
     <table className="w-full table-fixed mt-10 text-center rounded-md bg-slate-200">
       <thead>
@@ -14,14 +14,15 @@ const Report = ({ data }: any) => {
           <th className="p-2">Recuperados</th>
           <th className="p-2">Infectados</th>
           <th className="p-2">Mortos</th>
+          <th className="p-2"></th>
         </tr>
       </thead>
       <tbody>
         {data.map((d: any) => {
           return (
             <tr
-              onClick={() => navigate(`/country/${d.country}`)}
-              className="w-full bg-slate-50 odd:bg-slate-100 cursor-pointer hover:bg-sky-100"
+              key={d.country}
+              className="w-full bg-slate-50 odd:bg-slate-100"
             >
               <td className="flex items-center justify-center">
                 <img
@@ -32,11 +33,18 @@ const Report = ({ data }: any) => {
               </td>
               <td>{d.country}</td>
               <td>{d.continent}</td>
-              <td>{d.population}</td>
-              <td>{d.cases}</td>
-              <td>{d.recovered}</td>
-              <td>{d.active}</td>
-              <td>{d.deaths}</td>
+              <td>{Intl.NumberFormat().format(d.population)}</td>
+              <td>{Intl.NumberFormat().format(d.cases)}</td>
+              <td>{Intl.NumberFormat().format(d.recovered)}</td>
+              <td>{Intl.NumberFormat().format(d.active)}</td>
+              <td>{Intl.NumberFormat().format(d.deaths)}</td>
+              <td>
+                <Link to={`/country/${d.country}`}>
+                  <button type="button" className="border border-slate-400 rounded-md bg-white hover:bg-green-100 p-2">
+                    <BsEyeFill fontSize={20} />
+                  </button>
+                </Link>
+              </td>
             </tr>
           );
         })}
