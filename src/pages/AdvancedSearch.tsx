@@ -49,7 +49,7 @@ const AdvancedSearch = () => {
           <SelectForm name="population" label="População" options={populationAndTests} />
           <SelectForm name="cases" label="Casos" options={cases} />
           <SelectForm name="recovered" label="Recuperados" options={recovered} />
-          <SelectForm name="active" label="Infectados" options={active} />
+          <SelectForm name="active" label="Ativos" options={active} />
           <SelectForm name="deaths" label="Mortos" options={deaths} />
           <SelectForm name="tests" label="Testes" options={populationAndTests} />
           <SelectForm name="todayCases" label="Casos hoje" options={today} />

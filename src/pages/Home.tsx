@@ -158,7 +158,7 @@ const Home = () => {
                   }],
                   labels: [
                     'Recuperados',
-                    'Infectados',
+                    'Ativos',
                     'Mortos'
                   ],
                 }}

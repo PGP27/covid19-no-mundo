@@ -98,7 +98,7 @@ const CountryDetails = () => {
                     }],
                     labels: [
                       'Recuperados',
-                      'Infectados',
+                      'Ativos',
                       'Mortos'
                     ],
                   }}
