@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 const Report = ({ data }: any) => {
   return (
-    <table className=" w-full table-fixed mt-20 text-center rounded-md bg-slate-200">
+    <table className="w-full table-fixed mt-20 text-center rounded-md bg-slate-200">
       <thead>
         <tr>
           <th className="p-2">#</th>
